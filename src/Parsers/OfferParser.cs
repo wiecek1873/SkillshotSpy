@@ -1,15 +1,17 @@
 ﻿using HtmlAgilityPack;
-using Scraper.WebApi.Interfaces;
+using SkillshotSpy.Entities;
+using SkillshotSpy.Interfaces;
 
-namespace Scraper.WebApi.Services;
-public class SkillshotOfferParserService : IParserService<RequestOfferDto>
+namespace SkillshotSpy.Parsers;
+
+public class OfferParser : IParser<Offer>
 {
-    public RequestOfferDto Parse(string html)
+    public Offer Parse(string html)
     {
         HtmlDocument htmlDocument = new();
         htmlDocument.LoadHtml(html);
 
-        var companyDto = new RequestOfferDto()
+        var companyDto = new Offer()
         {
             Title = ParseTitle(htmlDocument),
             CompanyName = ParseCompanyName(htmlDocument),
@@ -26,12 +28,12 @@ public class SkillshotOfferParserService : IParserService<RequestOfferDto>
         return companyDto;
     }
 
-    private string ParseTitle(HtmlDocument htmlDocument)
+    private static string ParseTitle(HtmlDocument htmlDocument)
     {
         return htmlDocument.DocumentNode.SelectSingleNode("//*[@id=\"job_presentation\"]/h1").InnerText.Replace("\n", string.Empty);
     }
 
-    private string ParseCompanyName(HtmlDocument htmlDocument)
+    private static string ParseCompanyName(HtmlDocument htmlDocument)
     {
         if (htmlDocument.DocumentNode.SelectSingleNode("//*[@id=\"job_presentation\"]/p[1]/span[3]")?.InnerText == "opublikowane przez")
             return htmlDocument.DocumentNode.SelectSingleNode("//*[@id=\"job_presentation\"]/p[1]/b[1]").InnerText.Replace("\n", string.Empty);
@@ -39,7 +41,7 @@ public class SkillshotOfferParserService : IParserService<RequestOfferDto>
             return htmlDocument.DocumentNode.SelectSingleNode("//*[@id=\"job_presentation\"]/p[1]/b/a").InnerText.Replace("\n", string.Empty);
     }
 
-    private string ParseLocationName(HtmlDocument htmlDocument)
+    private static string ParseLocationName(HtmlDocument htmlDocument)
     {
         if (htmlDocument.DocumentNode.SelectSingleNode("//*[@id=\"job_presentation\"]/p[1]/span[3]")?.InnerText == "opublikowane przez")
             return htmlDocument.DocumentNode.SelectSingleNode("//*[@id=\"job_presentation\"]/p[1]/b[2]").InnerText.Replace("\n", string.Empty);
@@ -47,40 +49,40 @@ public class SkillshotOfferParserService : IParserService<RequestOfferDto>
             return htmlDocument.DocumentNode.SelectSingleNode("//*[@id=\"job_presentation\"]/p[1]/span[2]").NextSibling.InnerText;
     }
 
-    private string ParseCategoryName(HtmlDocument htmlDocument)
+    private static string ParseCategoryName(HtmlDocument htmlDocument)
     {
         return htmlDocument.DocumentNode.SelectSingleNode("//*[@id=\"job_presentation\"]/p[2]/span[2]").InnerText.Replace("\n", string.Empty);
     }
 
-    private string ParseWorkingTimeName(HtmlDocument htmlDocument)
+    private static string ParseWorkingTimeName(HtmlDocument htmlDocument)
     {
         return htmlDocument.DocumentNode.SelectSingleNode("//*[@id=\"job_presentation\"]/p[2]/span[1]").InnerText.Replace("\n", string.Empty);
     }
 
-    private string? ParseSeniorityName(HtmlDocument htmlDocument)
+    private static string? ParseSeniorityName(HtmlDocument htmlDocument)
     {
         return string.Empty;
         //return htmlDocument.DocumentNode.SelectSingleNode("")?.InnerText;
     }
 
-    private int? ParseSalaryMin(HtmlDocument htmlDocument)
+    private static int? ParseSalaryMin(HtmlDocument htmlDocument)
     {
         return 0;
         //return int.Parse(htmlDocument.DocumentNode.SelectSingleNode("")?.InnerText);
     }
 
-    private int? ParseSalaryMax(HtmlDocument htmlDocument)
+    private static int? ParseSalaryMax(HtmlDocument htmlDocument)
     {
         return 0;
         //return int.Parse(htmlDocument.DocumentNode.SelectSingleNode("")?.InnerText);
     }
 
-    private DateOnly ParseDate(HtmlDocument htmlDocument)
+    private static DateOnly ParseDate(HtmlDocument htmlDocument)
     {
         return DateOnly.Parse(htmlDocument.DocumentNode.SelectSingleNode("//*[@id=\"job_presentation\"]/p[3]/strong").InnerText);
     }
 
-    private int ParseViews(HtmlDocument htmlDocument)
+    private static int ParseViews(HtmlDocument htmlDocument)
     {
         return int.Parse(htmlDocument.DocumentNode.SelectSingleNode("//*[@id=\"job_presentation\"]/p[4]/strong").InnerText);
     }

@@ -1,15 +1,17 @@
-﻿using Scraper.WebApi.Interfaces;
-using HtmlAgilityPack;
+﻿using HtmlAgilityPack;
+using SkillshotSpy.Entities;
+using SkillshotSpy.Interfaces;
 
-namespace Scraper.WebApi.Services;
-public class SkillshotCompanyParserService : IParserService<RequestCompanyDto>
+namespace SkillshotSpy.Parsers;
+
+public class CompanyParser : IParser<Company>
 {
-    public RequestCompanyDto Parse(string html)
+    public Company Parse(string html)
     {
         HtmlDocument htmlDocument = new();
         htmlDocument.LoadHtml(html);
 
-        var companyDto = new RequestCompanyDto
+        var companyDto = new Company
         {
             Name = ParseName(htmlDocument),
             Description = ParseDescription(htmlDocument),
@@ -19,17 +21,17 @@ public class SkillshotCompanyParserService : IParserService<RequestCompanyDto>
         return companyDto;
     }
 
-    private string ParseName(HtmlDocument htmlDocument)
+    private static string ParseName(HtmlDocument htmlDocument)
     {
         return htmlDocument.DocumentNode.SelectSingleNode("/html/body/div[2]/h1[1]").InnerText.Replace("\n", string.Empty);
     }
 
-    private string? ParseDescription(HtmlDocument htmlDocument)
+    private static string? ParseDescription(HtmlDocument htmlDocument)
     {
         return htmlDocument.DocumentNode.SelectSingleNode("/html/body/div[2]/div/p/text()")?.InnerText;
     }
 
-    private string? ParseWebsite(HtmlDocument htmlDocument)
+    private static string? ParseWebsite(HtmlDocument htmlDocument)
     {
         return htmlDocument.DocumentNode.SelectSingleNode("/html/body/div[2]/p[2]/b/a")?.InnerText;
     }
