@@ -4,12 +4,11 @@ using SkillshotSpy.Interfaces;
 
 namespace SkillshotSpy.Parsers;
 
-public class OfferParser : IParser<Offer>
+public class OfferParser : Parser ,IParser<Offer>
 {
     public Offer Parse(string html)
     {
-        HtmlDocument htmlDocument = new();
-        htmlDocument.LoadHtml(html);
+        HtmlDocument htmlDocument = LoadHtml(html);
 
         var companyDto = new Offer()
         {

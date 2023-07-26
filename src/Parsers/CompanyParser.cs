@@ -4,21 +4,20 @@ using SkillshotSpy.Interfaces;
 
 namespace SkillshotSpy.Parsers;
 
-public class CompanyParser : IParser<Company>
+public class CompanyParser : Parser, IParser<Company>
 {
     public Company Parse(string html)
     {
-        HtmlDocument htmlDocument = new();
-        htmlDocument.LoadHtml(html);
+        var htmlDocument = LoadHtml(html);
 
-        var companyDto = new Company
+        var company = new Company
         {
             Name = ParseName(htmlDocument),
             Description = ParseDescription(htmlDocument),
             Website = ParseWebsite(htmlDocument)
         };
 
-        return companyDto;
+        return company;
     }
 
     private static string ParseName(HtmlDocument htmlDocument)
