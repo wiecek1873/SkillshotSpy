@@ -4,7 +4,7 @@ using SkillshotSpy.Interfaces;
 
 namespace SkillshotSpy.Parsers;
 
-public class OfferParser : Parser ,IParser<Offer>
+public class OfferParser : Parser, IParser<Offer>
 {
     public Offer Parse(string html)
     {
