@@ -1,11 +1,10 @@
 # SkillshotSpy
 [![CC BY-NC-SA 4.0][cc-by-nc-sa-shield]][cc-by-nc-sa]
 
-## Deprecated
-Deprecated due to changes in terms of service which now disallow scraping.
-
 Web API created in Asp.Net. Designed to scrape and parse skillshot.pl - job offer website.
 
+## Deprecated
+Deprecated due to changes in terms of service which now disallow scraping.
 
 ## License
 This work is licensed under a
